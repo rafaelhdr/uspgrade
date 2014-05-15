@@ -1,3 +1,4 @@
 *.pyc
 uspgrade/settings.py
+db.sqlite3
 
