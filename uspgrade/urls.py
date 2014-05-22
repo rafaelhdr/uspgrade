@@ -5,8 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # home
+    
     url(r'^$', 'uspgrade.views.home', name='home'),
+    url(r'^sobre$', 'uspgrade.views.sobre', name='sobre'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

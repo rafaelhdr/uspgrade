@@ -20,3 +20,18 @@ def home(request):
     context['sugestoes'] = Sugestao.objects.all()
 
     return render_to_response('uspgrade/home.html', context)
+
+def sobre(request):
+    """
+    Landing page.
+
+    **Context**
+
+    None
+
+    **Template:**
+
+    :template:`uspgrade/sobre.html`
+
+    """
+    return render_to_response('uspgrade/sobre.html')
