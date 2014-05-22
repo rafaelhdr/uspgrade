@@ -1,6 +1,7 @@
 # coding=utf8
 
 from django.shortcuts import redirect, render_to_response
+from uspgrade.models import Sugestao
 
 def home(request):
     """
@@ -15,4 +16,7 @@ def home(request):
     :template:`uspgrade/home.html`
 
     """
-    return render_to_response('uspgrade/home.html')
+    context = {}
+    context['sugestoes'] = Sugestao.objects.all()
+
+    return render_to_response('uspgrade/home.html', context)
