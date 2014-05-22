@@ -44,6 +44,8 @@ class Comentario(models.Model):
     """"""
     data = models.DateField(auto_now_add=True)
     conteudo = models.TextField()
+    sugestao = models.ForeignKey(Sugestao)
+    usuario = models.ForeignKey(Usuario)
 
 class Resposta(models.Model):
     """"""
@@ -54,6 +56,8 @@ class Resposta(models.Model):
     data = models.DateField(auto_now_add=True)
     conteudo = models.TextField()
     tipo = models.CharField(max_length=1, choices=TIPO_RESPOSTA)
+    sugestao = models.ForeignKey(Sugestao)
+    usuario = models.ForeignKey(Usuario)
 
 class Voto(models.Model):
     """"""
