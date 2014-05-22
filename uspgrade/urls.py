@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     
     url(r'^$', 'uspgrade.views.home', name='home'),
     url(r'^sobre$', 'uspgrade.views.sobre', name='sobre'),
+    url(r'^fazer-sugestao$', 'uspgrade.views.fazer_sugestao', name='fazer-sugestao'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
