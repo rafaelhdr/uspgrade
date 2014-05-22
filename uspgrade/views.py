@@ -2,8 +2,9 @@
 
 from django.shortcuts import redirect, render_to_response
 from uspgrade.models import Sugestao, Usuario
-from uspgrade.forms import SugestaoForm
+from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm
 from django.core.context_processors import csrf
+from django.contrib.auth import authenticate
 
 def home(request):
     """
@@ -19,7 +20,8 @@ def home(request):
 
     """
     context = {}
-    context['sugestoes'] = Sugestao.objects.all()
+    sugestoes = Sugestao.objects.all()
+    context['sugestoes_recentes'] = sugestoes.order_by('-data')
 
     return render_to_response('uspgrade/home.html', context)
 
@@ -37,6 +39,40 @@ def sobre(request):
 
     """
     return render_to_response('uspgrade/sobre.html')
+
+def login(request):
+    """
+    Página para login.
+
+    **Context**
+
+    ``form``
+        Form de login
+
+    **Template:**
+
+    :template:`uspgrade/login.html`
+
+    """
+    context = {}
+    context.update(csrf(request))
+    #GET
+    if request.method == 'GET':
+        form = LoginForm()
+
+    # POST
+    elif request.method == 'POST':
+        form = LoginForm()
+        # username = form.cleaned_data['username']
+        # password = form.cleaned_data['password']
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            context['sucesso'] = True
+        else:
+            context['falha'] = True
+
+    context['form'] = form
+    return render_to_response('uspgrade/login.html', context)
 
 
 def fazer_sugestao(request):

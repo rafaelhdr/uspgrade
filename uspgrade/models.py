@@ -35,7 +35,7 @@ class Sugestao(models.Model):
     )
     fechada = models.BooleanField()
     notificada = models.BooleanField()
-    data = models.DateField(auto_now_add=True)
+    data = models.DateTimeField(auto_now_add=True)
     categoria = models.CharField(max_length=30, choices=CATEGORIAS)
     titulo = models.CharField(max_length=100)
     conteudo = models.TextField()

@@ -1,0 +1,39 @@
+{% extends "uspgrade/base.html" %}
+
+{% block 'content' %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+        <form role="form" method="POST" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="row">
+
+            {% if falha %}
+          	<div class="form-group col-md-12">
+          		<div class="alert alert-danger">Usuário ou senha incorretos!</div>
+          	</div>
+            {% endif %}
+
+            {% for field in form.visible_fields %}
+            <div class="form-group col-md-12">
+              <label for="input1">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+              <div class="alert alert-danger">{{ field.errors }}</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-group col-lg-12">
+              <input type="hidden" name="save" value="contact">
+              <button type="submit" class="btn btn-primary pull-right">Fazer login</button>
+              <div class="clearfix"></div>
+            </div>
+
+          </div>
+        </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

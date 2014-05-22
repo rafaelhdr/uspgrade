@@ -13,9 +13,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">Mais recentes</div>
         <div class="panel-body">
-          {% if sugestoes %}
-          {% for sugestao in sugestoes %}
-          {{ sugestao.titulo }}
+          {% if sugestoes_recentes %}
+          {% for sugestao in sugestoes_recentes %}
+          <p><a href="#">{{ sugestao.titulo }}</a></p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -36,13 +36,30 @@
         <div class="panel-heading">Respondidas</div>
         <div class="panel-body">
           Não está pronto
+          TODO: Terminar resultados
         </div>
       </div>
     </div>
     <div class="col-sm-3">
       <p>
-        O USPGrade....... (não está pronto)
-        TODO: Terminar texto e resultados
+        <p>
+          O UsPGrade é sua ferramenta para consertar os defeitos da universidade! Fique atento para as palavras em negrito, elas são
+          a chave para utilizar o UsPGrade!
+        </p>
+        <p>
+          Aqui você pode dar a sua <b>sugestão</b> sobre os problemas que te afetam no dia a dia da USP. 
+          E caso outros sofram o mesmo que você, eles te <b>endossarão</b>. Mas como não é possível concordar em tudo,
+          haverão aqueles que <b>rechaçarão</b> sua idéia. Entretanto com 100 <b>endossos</b> a sugestão é enviada 
+          a um administrador que dará uma resposta aos usuários. Todas as sugestões podem ser <b>comentadas</b>, não deixe de
+          dar a sua opinião!
+        </p>
+        <p>
+          Comportamento anti-ético não será permitido no UsPGrade, sugestões e comentários desrespeitosos serão removidos do site. 
+          Os próprios usuários podem ajudar a identificar algo impróprio fazendo uma <b>denúncia</b>.
+        </p>
+        <p>
+          BOAS SUGESTÕES!
+        </p>
       </p>
 
       <p>
