@@ -1,6 +1,7 @@
 # coding=utf8
 
 from django.db import models
+from django.contrib.auth.models import User
 
 class Usuario(models.Model):
     """ """
@@ -19,6 +20,7 @@ class Usuario(models.Model):
     cpf = models.CharField(max_length=11)
     instituto = models.CharField(max_length=50, choices=INSTITUTOS)
     tipo = models.CharField(max_length=20, choices=TIPOS_USUARIOS)
+    user = models.OneToOneField(User)
 
 class Sugestao(models.Model):
     """"""
