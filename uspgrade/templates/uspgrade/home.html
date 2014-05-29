@@ -29,7 +29,7 @@
         <div class="panel-body">
           {% if mais_votadas %}
           {% for sugestao in mais_votadas %}
-          <p><a href="#">{{ sugestao.titulo }}</a></p>
+          <p><a href="#">{{ sugestao.sugestao__titulo }}</a></p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas

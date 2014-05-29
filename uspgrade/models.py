@@ -1,6 +1,7 @@
 # coding=utf8
 
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import User
 
 class Usuario(models.Model):
@@ -21,6 +22,10 @@ class Usuario(models.Model):
     instituto = models.CharField(max_length=50, choices=INSTITUTOS)
     tipo = models.CharField(max_length=20, choices=TIPOS_USUARIOS)
     user = models.OneToOneField(User)
+
+    def __unicode__(self):
+        """Display nome as instance information"""
+        return self.nome
 
 class Sugestao(models.Model):
     """"""
@@ -48,11 +53,25 @@ class Sugestao(models.Model):
 
     @classmethod
     def mais_votadas(cls):
-        return cls.objects.all()
+        votos = Voto.objects.values('sugestao__titulo').annotate(qntd_votos=Count('sugestao')).order_by('-qntd_votos')[0:10]
+        return votos
+        sugestoes = []
+        for voto in votos:
+            pass
+            #sugestoes.append(voto.sugestao)
+        return sugestoes
 
     @classmethod
     def respondidas(cls):
-        return Resposta.objects.order_by('pk').select_related('sugestao')[0:10]
+        respostas = Resposta.objects.order_by('pk').select_related('sugestao')[0:10]
+        sugestoes = []
+        for resposta in respostas:
+            sugestoes.append(resposta.sugestao)
+        return sugestoes
+
+    def __unicode__(self):
+        """Display titulo as instance information"""
+        return self.titulo
 
 class Comentario(models.Model):
     """"""
