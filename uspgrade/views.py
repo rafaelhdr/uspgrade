@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render_to_response
 from uspgrade.models import Sugestao, Usuario
 from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm
 from django.core.context_processors import csrf
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 def home(request):
     """
@@ -40,7 +40,7 @@ def sobre(request):
     """
     return render_to_response('uspgrade/sobre.html')
 
-def login(request):
+def entrar(request):
     """
     Página para login.
 
@@ -67,7 +67,8 @@ def login(request):
         # password = form.cleaned_data['password']
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:
-            context['sucesso'] = True
+            login(request, user)
+            return redirect('home')
         else:
             context['falha'] = True
 
