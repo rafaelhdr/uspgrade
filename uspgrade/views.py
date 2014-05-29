@@ -129,3 +129,58 @@ def fazer_sugestao(request):
 
     # Response
     return render_to_response('uspgrade/fazer-sugestao.html', context)
+
+def cadastro(request):
+    """
+    Página para usuário fazer sugestão
+
+    **Context**
+
+    ``form``
+        Form da sugestão
+    ``csrf``
+        Segurança do sistema
+    ``success``
+        Flag de sucesso
+    ``fail``
+        Flag de falha
+
+    **Template:**
+
+    :template:`blog/post.html`
+
+    """
+    context = {}
+    user = request.user
+
+    if user.is_authenticated():
+        context['logged'] = True
+
+    else:
+        context['logged'] = False
+        context.update(csrf(request))
+
+        #GET
+        if request.method == 'GET':
+            form = SugestaoForm()
+
+        # POST
+        elif request.method == 'POST':
+            form = SugestaoForm(request.POST)
+            if form.is_valid():
+                sugestao = Sugestao(titulo=form.cleaned_data['titulo'],
+                                    conteudo=form.cleaned_data['conteudo'],
+                                    instituto=form.cleaned_data['instituto'],
+                                    categoria=form.cleaned_data['categoria'],
+                                    usuario=Usuario.objects.get(user=user),
+                                    fechada=False,
+                                    notificada=False,
+                                    )
+                sugestao.save()
+                context['sucesso'] = True
+            else:
+                context['falha'] = True
+        context['form'] = form
+
+    # Response
+    return render_to_response('uspgrade/cadastro.html', context)

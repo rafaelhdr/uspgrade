@@ -1,0 +1,58 @@
+{% extends "uspgrade/base.html" %}
+
+{% block 'content' %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+    	{% if logged %}
+
+    	<h1>Usuário logado</h1>
+
+    	<p>Você já está logado no UsPGRADE.</p>
+
+    	{% else %}
+
+        <form role="form" method="POST" action="{% url 'cadastro' %}">
+          {% csrf_token %}
+          <div class="row">
+
+          	{% if sucesso %}
+          	<div class="form-group col-md-12">
+          		<div class="alert alert-success">Sugestão cadastrada com sucesso!</div>
+          		<p>
+          			Sua sugestão já está cadastrada no sistema!<br />
+          			Volte para a home, e poderá vê-la.
+          	</div>
+            {% else %}
+
+            {% if falha %}
+          	<div class="form-group col-md-12">
+          		<div class="alert alert-danger">Houve alguma falha no preenchimento dos dados!</div>
+          	</div>
+            {% endif %}
+
+            {% for field in form.visible_fields %}
+            <div class="form-group col-md-12">
+              <label for="input1">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+              <div class="alert alert-danger">{{ field.errors }}</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-group col-lg-12">
+              <input type="hidden" name="save" value="contact">
+              <button type="submit" class="btn btn-primary pull-right">Enviar sugestão</button>
+              <div class="clearfix"></div>
+            </div>
+            {% endif %}
+
+          </div>
+        </form>
+
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
