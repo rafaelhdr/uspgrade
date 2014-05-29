@@ -27,7 +27,13 @@
       <div class="panel panel-default">
         <div class="panel-heading">Mais votadas</div>
         <div class="panel-body">
-          Não está pronto
+          {% if mais_votadas %}
+          {% for sugestao in mais_votadas %}
+          <p><a href="#">{{ sugestao.titulo }}</a></p>
+          {% endfor %}
+          {% else %}
+          Não há sugestões cadastradas
+          {% endif %}
         </div>
       </div>
     </div>
@@ -35,8 +41,13 @@
       <div class="panel panel-default">
         <div class="panel-heading">Respondidas</div>
         <div class="panel-body">
-          Não está pronto
-          TODO: Terminar resultados
+          {% if sugestoes_respondidas %}
+          {% for sugestao in sugestoes_respondidas %}
+          <p><a href="#">{{ sugestao.titulo }}</a></p>
+          {% endfor %}
+          {% else %}
+          Não há sugestões cadastradas
+          {% endif %}
         </div>
       </div>
     </div>

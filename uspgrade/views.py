@@ -21,7 +21,9 @@ def home(request):
     """
     context = {}
     sugestoes = Sugestao.objects.all()
-    context['sugestoes_recentes'] = sugestoes.order_by('-data')
+    context['sugestoes_recentes'] = Sugestao.mais_recentes()
+    context['mais_votadas'] = Sugestao.mais_votadas()
+    context['sugestoes_respondidas'] = Sugestao.respondidas()
 
     return render_to_response('uspgrade/home.html', context)
 

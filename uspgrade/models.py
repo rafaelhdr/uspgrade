@@ -42,6 +42,18 @@ class Sugestao(models.Model):
     instituto = models.CharField(max_length=50, choices=INSTITUTOS)
     usuario = models.ForeignKey(Usuario)
 
+    @classmethod
+    def mais_recentes(cls):
+        return cls.objects.order_by('-data')[0:10]
+
+    @classmethod
+    def mais_votadas(cls):
+        return cls.objects.all()
+
+    @classmethod
+    def respondidas(cls):
+        return Resposta.objects.order_by('pk').select_related('sugestao')[0:10]
+
 class Comentario(models.Model):
     """"""
     data = models.DateField(auto_now_add=True)
