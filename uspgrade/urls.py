@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^sobre$', 'uspgrade.views.sobre', name='sobre'),
     url(r'^fazer-sugestao$', 'uspgrade.views.fazer_sugestao', name='fazer-sugestao'),
     url(r'^cadastro$', 'uspgrade.views.cadastro', name='cadastro'),
+    url(r'^buscar$', 'uspgrade.views.buscar', name='buscar'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

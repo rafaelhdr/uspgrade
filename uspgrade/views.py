@@ -2,7 +2,7 @@
 
 from django.shortcuts import redirect, render_to_response
 from uspgrade.models import Sugestao, Usuario
-from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm
+from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
@@ -27,6 +27,46 @@ def home(request):
     context['sugestoes_respondidas'] = Sugestao.respondidas()
 
     return render_to_response('uspgrade/home.html', context, context_instance=RequestContext(request))
+
+def buscar(request):
+    """
+    Página para buscas de sugestões.
+
+    **Context**
+
+    Sugestões
+
+    **Template:**
+
+    :template:`uspgrade/buscar.html`
+
+    """
+    context = {}
+    context.update(csrf(request))
+
+    if request.method == 'GET':
+        form = BuscaForm()
+        sugestoes = Sugestao.objects.all()
+
+    elif request.method == 'POST':
+        form = BuscaForm(request.POST)
+
+        sugestoes = Sugestao.objects.all()
+        if form.is_valid():
+            categoria = form.cleaned_data['categoria']
+            if categoria:
+                sugestoes = sugestoes.filter(categoria=categoria)
+            instituto = form.cleaned_data['instituto']
+            if instituto:
+                sugestoes = sugestoes.filter(instituto=instituto)
+            conteudo = form.cleaned_data['conteudo']
+            if conteudo:
+                sugestoes = sugestoes.filter(conteudo__icontains=conteudo)
+
+
+    context['form'] = form
+    context['sugestoes'] = sugestoes
+    return render_to_response('uspgrade/buscar.html', context, context_instance=RequestContext(request))
 
 def sobre(request):
     """

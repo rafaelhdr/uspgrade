@@ -5,6 +5,22 @@ from django import forms
 from uspgrade.models import Sugestao, Usuario
 from django.contrib.auth.models import User
 
+class BuscaForm(ModelForm):
+    class Meta:
+        model = Sugestao
+        fields = ['conteudo', 'instituto', 'categoria']
+        widgets = {
+            'conteudo': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Conteúdo da sua sugestão'}),
+            'categoria': forms.Select(attrs={'class':'form-control'}),
+            'instituto': forms.Select(attrs={'class':'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BuscaForm, self).__init__(*args, **kwargs)
+        self.fields['conteudo'].required = False
+        self.fields['categoria'].required = False
+        self.fields['instituto'].required = False
+
 class SugestaoForm(ModelForm):
     class Meta:
         model = Sugestao

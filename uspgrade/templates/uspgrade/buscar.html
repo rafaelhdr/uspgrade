@@ -1,0 +1,53 @@
+{% extends "uspgrade/base.html" %}
+
+{% block 'content' %}
+<div class="container">
+
+  <form role="form" method="POST" action="{% url 'buscar' %}">
+    {% csrf_token %}
+    <div class="row">
+
+      <div class="form-group col-md-12">
+        {{ form.conteudo }}
+        {% if form.conteudo.errors %}
+        <div class="alert alert-danger">{{ form.conteudo.errors }}</div>
+        {% endif %}
+      </div>
+      <div class="form-group col-md-4">
+        {{ form.instituto }}
+        {% if form.instituto.errors %}
+        <div class="alert alert-danger">{{ form.instituto.errors }}</div>
+        {% endif %}
+      </div>
+      <div class="form-group col-md-4">
+        {{ form.categoria }}
+        {% if form.categoria.errors %}
+        <div class="alert alert-danger">{{ form.categoria.errors }}</div>
+        {% endif %}
+      </div>
+      <div class="form-group col-md-4">
+        <button type="submit" class="btn btn-default pull-right">Buscar</button>
+      </div>
+
+    </form>
+    <div class="row">
+
+      <div class="col-sm-12">
+        {% for sugestao in sugestoes %}
+        <hr />
+        <div class="row">
+          <div class="col-sm-6">
+            <a href="{{sugestao.get_absolute_path}}">{{ sugestao.titulo }}</a>
+          </div>
+          <div class="col-sm-6">
+          </div>
+          <div class="col-sm-12">
+            {{ sugestao.conteudo | slice:":100" }}...
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+  {% endblock %}
