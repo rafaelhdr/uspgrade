@@ -9,7 +9,7 @@
 
     	<h1>Usuário logado</h1>
 
-    	<p>Você já está logado no UsPGRADE.</p>
+    	<p>Você já está cadastrado no UsPGRADE.</p>
 
     	{% else %}
 
@@ -19,10 +19,10 @@
 
           	{% if sucesso %}
           	<div class="form-group col-md-12">
-          		<div class="alert alert-success">Sugestão cadastrada com sucesso!</div>
+          		<div class="alert alert-success">Cadastro finalizado com sucesso.</div>
           		<p>
-          			Sua sugestão já está cadastrada no sistema!<br />
-          			Volte para a home, e poderá vê-la.
+          			Você já pode utilizar o UsPGRADE agora<br />
+          			Faça bom uso!
           	</div>
             {% else %}
 
@@ -43,7 +43,7 @@
             {% endfor %}
             <div class="form-group col-lg-12">
               <input type="hidden" name="save" value="contact">
-              <button type="submit" class="btn btn-primary pull-right">Enviar sugestão</button>
+              <button type="submit" class="btn btn-primary pull-right">Finalizar cadastro</button>
               <div class="clearfix"></div>
             </div>
             {% endif %}

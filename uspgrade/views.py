@@ -6,6 +6,7 @@ from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, Come
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
+from django.contrib.auth.models import User
 
 def home(request):
     """
@@ -241,7 +242,7 @@ def cadastro(request):
 
     **Template:**
 
-    :template:`blog/post.html`
+    :template:`uspgrade/cadastro.html`
 
     """
     context = {}
@@ -256,21 +257,21 @@ def cadastro(request):
 
         #GET
         if request.method == 'GET':
-            form = SugestaoForm()
+            form = UsuarioForm()
 
         # POST
         elif request.method == 'POST':
-            form = SugestaoForm(request.POST)
+            form = UsuarioForm(request.POST)
             if form.is_valid():
-                sugestao = Sugestao(titulo=form.cleaned_data['titulo'],
-                                    conteudo=form.cleaned_data['conteudo'],
+                user = User.objects.create_user(form.cleaned_data['email'], form.cleaned_data['email'], form.cleaned_data['senha'])
+                user.save()
+                usuario = Usuario(nome=form.cleaned_data['nome'],
+                                    cpf=form.cleaned_data['cpf'],
                                     instituto=form.cleaned_data['instituto'],
-                                    categoria=form.cleaned_data['categoria'],
-                                    usuario=Usuario.objects.get(user=user),
-                                    fechada=False,
-                                    notificada=False,
+                                    user=user,
+                                    tipo='Visitante',
                                     )
-                sugestao.save()
+                usuario.save()
                 context['sucesso'] = True
             else:
                 context['falha'] = True

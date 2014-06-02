@@ -50,11 +50,15 @@ class LoginForm(ModelForm):
         }
 
 class UsuarioForm(ModelForm):
+    senha = forms.CharField()
+    email = forms.CharField()
     class Meta:
         model = Usuario
-        #widgets = {
-        #    'titulo': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Título para sua sugestão'}),
-        #    'categoria': forms.Select(attrs={'class':'form-control'}),
-        #    'instituto': forms.Select(attrs={'class':'form-control'}),
-        #    'conteudo': forms.Textarea(attrs={'class':'form-control', 'placeholder': 'Conteúdo da sua sugestão'}),
-        #}
+        fields = ['nome', 'cpf', 'email', 'senha', 'instituto']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Seu nome completo'}),
+            'cpf': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'CPF'}),
+            'email': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}),
+            'senha': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Senha'}),
+            'instituto': forms.Select(attrs={'class':'form-control'}),
+        }
