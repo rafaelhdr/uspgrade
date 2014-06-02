@@ -5,6 +5,7 @@ from uspgrade.models import Sugestao, Usuario
 from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
+from django.template import RequestContext
 
 def home(request):
     """
@@ -25,7 +26,7 @@ def home(request):
     context['mais_votadas'] = Sugestao.mais_votadas()
     context['sugestoes_respondidas'] = Sugestao.respondidas()
 
-    return render_to_response('uspgrade/home.html', context)
+    return render_to_response('uspgrade/home.html', context, context_instance=RequestContext(request))
 
 def sobre(request):
     """
@@ -40,7 +41,7 @@ def sobre(request):
     :template:`uspgrade/sobre.html`
 
     """
-    return render_to_response('uspgrade/sobre.html')
+    return render_to_response('uspgrade/sobre.html', {}, context_instance=RequestContext(request))
 
 def entrar(request):
     """
@@ -75,8 +76,23 @@ def entrar(request):
             context['falha'] = True
 
     context['form'] = form
-    return render_to_response('uspgrade/login.html', context)
+    return render_to_response('uspgrade/login.html', context, context_instance=RequestContext(request))
 
+def sair(request):
+    """
+    Página para sair (apagar login).
+
+    **Context**
+
+    None
+
+    **Template:**
+
+    None
+
+    """
+    logout(request)
+    return redirect('home')
 
 def fazer_sugestao(request):
     """
@@ -131,7 +147,7 @@ def fazer_sugestao(request):
         context['form'] = form
 
     # Response
-    return render_to_response('uspgrade/fazer-sugestao.html', context)
+    return render_to_response('uspgrade/fazer-sugestao.html', context, context_instance=RequestContext(request))
 
 def cadastro(request):
     """
@@ -186,4 +202,4 @@ def cadastro(request):
         context['form'] = form
 
     # Response
-    return render_to_response('uspgrade/cadastro.html', context)
+    return render_to_response('uspgrade/cadastro.html', context, context_instance=RequestContext(request))
