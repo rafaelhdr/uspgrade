@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render_to_response
 from uspgrade.models import Sugestao, Usuario
 from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm
 from django.core.context_processors import csrf
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 
 def home(request):
