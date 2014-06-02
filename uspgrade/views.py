@@ -44,6 +44,7 @@ def sugestao(request, sugestao_id):
     """
     context = {}
     sugestao = get_object_or_404(Sugestao, id=sugestao_id)
+    usuario = Usuario.objects.get(user=request.user)
 
     if request.method == 'GET':
         form = ComentarioForm()
@@ -53,12 +54,13 @@ def sugestao(request, sugestao_id):
         if form.is_valid():
             comentario = Comentario(conteudo=form.cleaned_data['conteudo'],
                                     sugestao=sugestao,
-                                    usuario=Usuario.objects.get(user=request.user),
+                                    usuario=usuario,
                                     )
             comentario.save()
 
     context['sugestao'] = sugestao
     context['form'] = form
+    context['usuario'] = usuario
     return render_to_response('uspgrade/sugestao.html', context, context_instance=RequestContext(request))
 
 def buscar(request):
