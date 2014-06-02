@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django.test.client import Client
+from uspgrade.models import Usuario
 
 class UspgradeTest(TestCase):
     def setUp(self):
@@ -11,7 +12,19 @@ class UspgradeTest(TestCase):
         """
         
         """
-        response = self.client.get('/')
+        response = self.client.post('/cadastro',
+                                    {'nome': 'Novo usuário',
+                                     'cpf': '1234567890',
+                                     'email': 'teste@uspgrade.com.br',
+                                     'senha': 'minha-senha',
+                                     'instituto': 'POLI',
+                                    })
+
+        # Check post was inserted and is not active
+        usuario = Usuario.objects.get(nome='Novo usuário')
+        self.assertEqual(usuario.cpf, '1234567890')
+        self.assertEqual(usuario.instituto, 'POLI')
+        self.assertEqual(usuario.user.email, 'teste@uspgrade.com.br')
 
     def test_cadastro_de_usuario_falha_caso_seja_preenchido_com_dados_incorretos(self):
         """
