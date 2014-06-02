@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^fazer-sugestao$', 'uspgrade.views.fazer_sugestao', name='fazer-sugestao'),
     url(r'^cadastro$', 'uspgrade.views.cadastro', name='cadastro'),
     url(r'^buscar$', 'uspgrade.views.buscar', name='buscar'),
+    url(r'^sugestao/([-\w]+)$', 'uspgrade.views.sugestao', name='sugestao'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

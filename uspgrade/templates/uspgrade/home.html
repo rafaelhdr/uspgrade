@@ -15,7 +15,7 @@
         <div class="panel-body">
           {% if sugestoes_recentes %}
           {% for sugestao in sugestoes_recentes %}
-          <p><a href="#">{{ sugestao.titulo }}</a></p>
+          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a></p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -29,7 +29,7 @@
         <div class="panel-body">
           {% if mais_votadas %}
           {% for sugestao in mais_votadas %}
-          <p><a href="#">{{ sugestao.sugestao__titulo }}</a></p>
+          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.sugestao__titulo }}</a></p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -43,7 +43,7 @@
         <div class="panel-body">
           {% if sugestoes_respondidas %}
           {% for sugestao in sugestoes_respondidas %}
-          <p><a href="#">{{ sugestao.titulo }}</a></p>
+          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a></p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -76,7 +76,7 @@
       <p>
         <hr />
         <a href="{% url "fazer-sugestao" %}" class="btn btn-primary active" role="button">Faça sua sugestão</a><br /><br />
-        <a href="#" class="btn btn-primary active" role="button">Buscar sugestão</a>
+        <a href="{% url "buscar" %}" class="btn btn-primary active" role="button">Buscar sugestão</a>
       </p>
     </div>
   </div>

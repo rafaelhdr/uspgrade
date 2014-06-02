@@ -3,6 +3,7 @@
 from django.db import models
 from django.db.models import Count
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 class Usuario(models.Model):
     """ """
@@ -72,6 +73,12 @@ class Sugestao(models.Model):
     def __unicode__(self):
         """Display titulo as instance information"""
         return self.titulo
+
+    def get_absolute_url(self):
+        return reverse('sugestao', args=[str(self.id)])
+
+    def get_comentarios(self):
+        return self.comentario_set.all().order_by('-pk')
 
 class Comentario(models.Model):
     """"""

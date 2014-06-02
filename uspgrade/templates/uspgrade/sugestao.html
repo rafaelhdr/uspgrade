@@ -1,0 +1,61 @@
+{% extends "uspgrade/base.html" %}
+
+{% block 'content' %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+      <h1>{{ sugestao.titulo }}</h1>
+      <p>{{ sugestao.conteudo }}</p>
+      <p>Criada por {{ sugestao.usuario }} em {{ sugestao.data }}</p>
+      <p><strong>{{ sugestao.instituto }} | {{ sugestao.categoria }}</strong></p>
+
+      <form role="form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+
+          {% if falha %}
+          <div class="form-group col-md-12">
+            <div class="alert alert-danger">Preenchimento incorreto!</div>
+          </div>
+          {% endif %}
+
+          {% for field in form.visible_fields %}
+          <div class="form-group col-md-12">
+            <label for="input1">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="alert alert-danger">{{ field.errors }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <div class="form-group col-lg-12">
+            <input type="hidden" name="save" value="contact">
+            <button type="submit" class="btn btn-primary pull-right">Postar comentário</button>
+            <div class="clearfix"></div>
+          </div>
+
+        </div>
+      </form>
+
+      <h4>Comentários</h4>
+      {% for comentario in sugestao.get_comentarios %}
+      <div class="row">
+        <div class="col-sm-3">
+          {{comentario.usuario}}
+        </div>
+        <div class="col-sm-9">
+          {{comentario.conteudo}}
+        </div>
+      </div>
+      {% empty %}
+      Nenhum comentário
+      {% endfor %}
+
+    </div>
+    <div class="col-sm-3">
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

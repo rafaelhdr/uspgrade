@@ -1,8 +1,8 @@
 # coding=utf8
 
-from django.shortcuts import redirect, render_to_response
-from uspgrade.models import Sugestao, Usuario
-from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm
+from django.shortcuts import redirect, render_to_response, get_object_or_404
+from uspgrade.models import Sugestao, Usuario, Comentario
+from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, ComentarioForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
@@ -27,6 +27,39 @@ def home(request):
     context['sugestoes_respondidas'] = Sugestao.respondidas()
 
     return render_to_response('uspgrade/home.html', context, context_instance=RequestContext(request))
+
+def sugestao(request, sugestao_id):
+    """
+    Página para mostrar uma sugestão, com a possibilidade de comentar.
+
+    **Context**
+
+    Sugestão
+    Formulário para comentar
+
+    **Template:**
+
+    :template:`uspgrade/sugestao.html`
+
+    """
+    context = {}
+    sugestao = get_object_or_404(Sugestao, id=sugestao_id)
+
+    if request.method == 'GET':
+        form = ComentarioForm()
+
+    elif request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = Comentario(conteudo=form.cleaned_data['conteudo'],
+                                    sugestao=sugestao,
+                                    usuario=Usuario.objects.get(user=request.user),
+                                    )
+            comentario.save()
+
+    context['sugestao'] = sugestao
+    context['form'] = form
+    return render_to_response('uspgrade/sugestao.html', context, context_instance=RequestContext(request))
 
 def buscar(request):
     """
@@ -65,7 +98,7 @@ def buscar(request):
 
 
     context['form'] = form
-    context['sugestoes'] = sugestoes
+    context['sugestoes'] = sugestoes.order_by('-data')
     return render_to_response('uspgrade/buscar.html', context, context_instance=RequestContext(request))
 
 def sobre(request):

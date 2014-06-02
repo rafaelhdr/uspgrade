@@ -2,8 +2,16 @@
 
 from django.forms import ModelForm
 from django import forms
-from uspgrade.models import Sugestao, Usuario
+from uspgrade.models import Sugestao, Usuario, Comentario
 from django.contrib.auth.models import User
+
+class ComentarioForm(ModelForm):
+    class Meta:
+        model = Comentario
+        fields = ['conteudo',]
+        widgets = {
+            'conteudo': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Escreva aqui seu'}),
+        }
 
 class BuscaForm(ModelForm):
     class Meta:
