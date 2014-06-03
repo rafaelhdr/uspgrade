@@ -185,7 +185,16 @@ class UspgradeTest(TestCase):
         """
         
         """
-        response = self.client.get('/')
+        response = self.client.post('/login',
+                                    {'username': 'rafael',
+                                     'password': 'asdasd',
+                                    })
+        response = self.client.post('/api/votar',
+                                   {'voto': 'F',
+                                    'sugestao': '1',
+                                   })
+        sugestao = Sugestao.objects.get(pk=1)
+        self.assertEqual(sugestao.fechada, True)
 
     def test_sistema_envia_email_para_responsavel_quando_sugestao_atinge_x_votos(self):
         """

@@ -399,17 +399,25 @@ def votar(request):
         sugestao = Sugestao.objects.get(id=request.POST['sugestao'])
         usuario = Usuario.objects.get(user=request.user)
 
-        # Erro - já existe voto nessa sugestão
-        try:
-            voto = Voto.objects.get(usuario=usuario, sugestao=sugestao)
-            response_data['result'] = 'fail'
-            response_data['message'] = 'Você já votou para essa sugestão, e é permitido apenas um voto.'
+        if tipo_voto == 'F':
+            if usuario.tipo == 'Moderador':
+                sugestao.fechada = True
+                sugestao.save()
+                response_data['result'] = 'success'
+                response_data['message'] = 'Sugestão fechada com sucesso'
 
-        # Ok - pode votar
-        except Voto.DoesNotExist, e:
-            response_data['result'] = 'success'
-            response_data['message'] = 'Voto feito com sucesso.'
-            voto = Voto(usuario=usuario, sugestao=sugestao, tipo=tipo_voto)
-            voto.save()
+        else:
+            # Erro - já existe voto nessa sugestão
+            try:
+                voto = Voto.objects.get(usuario=usuario, sugestao=sugestao)
+                response_data['result'] = 'fail'
+                response_data['message'] = 'Você já votou para essa sugestão, e é permitido apenas um voto.'
+
+            # Ok - pode votar
+            except Voto.DoesNotExist, e:
+                response_data['result'] = 'success'
+                response_data['message'] = 'Voto feito com sucesso.'
+                voto = Voto(usuario=usuario, sugestao=sugestao, tipo=tipo_voto)
+                voto.save()
 
         return HttpResponse(json.dumps(response_data), content_type="application/json")
