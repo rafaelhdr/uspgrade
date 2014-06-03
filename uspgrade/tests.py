@@ -170,7 +170,16 @@ class UspgradeTest(TestCase):
         """
         
         """
-        response = self.client.get('/')
+        response = self.client.post('/login',
+                                    {'username': 'rafael',
+                                     'password': 'asdasd',
+                                    })
+        response = self.client.post('/cadastrar-responsavel',
+                                   {'tipo': 'Membro',
+                                    'email': 'rafael@hurpia.com.br'
+                                   })
+        usuario = Usuario.objects.get(pk=1)
+        self.assertEqual(usuario.tipo, 'Membro')
 
     def test_moderador_pode_fechar_sugestao(self):
         """

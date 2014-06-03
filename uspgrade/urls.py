@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^cadastro$', 'uspgrade.views.cadastro', name='cadastro'),
     url(r'^buscar$', 'uspgrade.views.buscar', name='buscar'),
     url(r'^sugestao/([-\w]+)$', 'uspgrade.views.sugestao', name='sugestao'),
+    url(r'^cadastrar-responsavel$', 'uspgrade.views.cadastrar_responsavel', name='cadastrar-responsavel'),
 
     url(r'^api/responder$', 'uspgrade.views.responder', name='responder'),
     url(r'^api/votar$', 'uspgrade.views.votar', name='votar'),

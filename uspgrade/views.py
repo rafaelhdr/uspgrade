@@ -2,7 +2,7 @@
 
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from uspgrade.models import Sugestao, Usuario, Comentario, Resposta, Voto
-from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, ComentarioForm, RespostaForm
+from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, ComentarioForm, RespostaForm, UsuarioTipoForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
@@ -241,6 +241,43 @@ def fazer_sugestao(request):
 
     # Response
     return render_to_response('uspgrade/fazer-sugestao.html', context, context_instance=RequestContext(request))
+
+def cadastrar_responsavel(request):
+    """
+    Página para o moderador cadastrar possível responsável
+
+    **Context**
+
+    ``form``
+        Form da sugestão
+
+    **Template:**
+
+    :template:`uspgrade/cadastrar_responsavel.html`
+    """
+    context = {}
+    context.update(csrf(request))
+    user = request.user
+    if not user.is_authenticated or user.usuario.tipo != 'Moderador':
+        return redirect('home')
+
+    if request.method == 'GET':
+        form = UsuarioTipoForm()
+    elif request.method == 'POST':
+        form = UsuarioTipoForm(request.POST)
+
+        if form.is_valid():
+            try:
+                usuario = Usuario.objects.get(user__email=request.POST['email'])
+                usuario.tipo = form.cleaned_data['tipo']
+                usuario.save()
+                context['sucesso'] = True
+            except Usuario.DoesNotExist, e:
+                context['falha'] = True
+        else:
+            context['falha'] = True
+    context['form'] = form
+    return render_to_response('uspgrade/cadastrar_responsavel.html', context, context_instance=RequestContext(request))
 
 def cadastro(request):
     """

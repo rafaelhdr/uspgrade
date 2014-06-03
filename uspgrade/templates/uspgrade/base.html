@@ -36,13 +36,23 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
+          {% if request.user.is_authenticated %}
+          <li><a href="/">Home</a></li>
+          {% if request.user.usuario.tipo == 'Moderador' %}
+          <li><a href="{% url "cadastrar-responsavel" %}">Cadastrar responsável</a></li>
+          {% endif %}
+          <li><a href="{% url "fazer-sugestao" %}">Faça sua sugestão</a></li>
+          <li><a href="{% url "sobre" %}">Sobre</a></li>
+          <li><a href="{% url "buscar" %}">Buscar</a></li>
+          <li><a href="{% url "sair" %}">Sair</a></li>
+          {% else %}
           <li><a href="/">Home</a></li>
           <li><a href="{% url "fazer-sugestao" %}">Faça sua sugestão</a></li>
           <li><a href="{% url "sobre" %}">Sobre</a></li>
           <li><a href="{% url "buscar" %}">Buscar</a></li>
           <li><a href="{% url "login" %}">Login</a></li>
           <li><a href="{% url "cadastro" %}">Cadastro</a></li>
-          <li><a href="{% url "sair" %}">Sair</a></li>
+          {% endif %}
         </ul>
       </div><!--/.nav-collapse -->
     </div>

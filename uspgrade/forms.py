@@ -59,6 +59,15 @@ class LoginForm(ModelForm):
             'password': forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Sua senha'}),
         }
 
+class UsuarioTipoForm(ModelForm):
+    email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}))
+    class Meta:
+        model = Usuario
+        fields = ['tipo']
+        widgets = {
+            'tipo': forms.Select(attrs={'class':'form-control'}),
+        }
+
 class UsuarioForm(ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Senha'}))
     email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}))
