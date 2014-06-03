@@ -423,7 +423,7 @@ def votar(request):
 
                 if sugestao.notificada == False:
                     endossos = Voto.objects.filter(sugestao=sugestao, tipo='E').count()
-                    if endossos > 0:
+                    if endossos > 100:
                         responsaveis = []
                         usuarios = Usuario.objects.filter(tipo='Responsavel', instituto=sugestao.instituto)
                         for usuario in usuarios:

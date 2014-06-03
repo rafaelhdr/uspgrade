@@ -200,10 +200,10 @@ class UspgradeTest(TestCase):
         """
         
         """
-        usuario = Usuario.objects.get(pk=1)
+        usuario = Usuario.objects.get(pk=2)
         sugestao = Sugestao.objects.get(pk=1)
         for i in range(100):
-            voto = Voto(usuario=usuario, sugestao=sugestao, voto='E')
+            voto = Voto(usuario=usuario, sugestao=sugestao, tipo='E')
             voto.save()
         response = self.client.post('/login',
                                     {'username': 'rafael',
