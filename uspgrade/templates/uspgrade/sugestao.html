@@ -8,13 +8,16 @@
       <p>{{ sugestao.conteudo }}</p>
       <p>Criada por {{ sugestao.usuario }} em {{ sugestao.data }}</p>
       <p><strong>{{ sugestao.instituto }} | {{ sugestao.categoria }}</strong></p>
+
       <p>
         <span title="Endossos" class="glyphicon glyphicon-chevron-up text-success"></span> {{ sugestao.conta_positivos }}
         <span title="Rechaçadas" class="glyphicon glyphicon-chevron-down text-danger"></span> {{ sugestao.conta_negativos }}
         <span title="Denúncias" class="glyphicon glyphicon-remove text-danger"></span> {{ sugestao.conta_denuncias }}<br />
+      {% if resposta %}
         <button class="btn btn-success botao-votar" data-sugestao="{{sugestao.id}}" data-voto="E">Endossar</button>
         <button class="btn btn-danger botao-votar"  data-sugestao="{{sugestao.id}}" data-voto="R">Rechaçar</button>
         <button class="btn btn-danger botao-votar"  data-sugestao="{{sugestao.id}}" data-voto="D">Denunciar</button>
+      {% endif %}
       </p>
 
       {% if resposta %}
@@ -25,6 +28,8 @@
       </font>
       {% endif %}
 
+      <hr />
+      {% if form %}
       <form role="form" method="POST">
         {% csrf_token %}
         <div class="row">
@@ -52,7 +57,15 @@
 
         </div>
       </form>
+      {% else %}
+      <div class="row">
+        <div class="form-group col-md-12">
+          <p>Você não pode postar comentários se não estiver logado no sistema.</p>
+        </div>
+      </div>
+      {% endif %}
 
+      <hr />
       <h4>Comentários</h4>
       {% for comentario in sugestao.get_comentarios %}
       <div class="row">

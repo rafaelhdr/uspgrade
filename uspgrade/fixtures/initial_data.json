@@ -147,7 +147,7 @@
    "model": "uspgrade.sugestao", 
    "fields": {
       "notificada": false, 
-      "categoria": "acessibilidade", 
+      "categoria": "infraestrutura", 
       "instituto": "POLI", 
       "usuario": 1, 
       "titulo": "Bloqueio do port\u00e3o", 

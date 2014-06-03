@@ -48,19 +48,28 @@ def sugestao(request, sugestao_id):
     """
     context = {}
     sugestao = get_object_or_404(Sugestao, id=sugestao_id)
-    usuario = Usuario.objects.get(user=request.user)
 
-    if request.method == 'GET':
-        form = ComentarioForm()
+    # usuário logado
+    try:
+        usuario = Usuario.objects.get(user=request.user)
 
-    elif request.method == 'POST':
-        form = ComentarioForm(request.POST)
-        if form.is_valid():
-            comentario = Comentario(conteudo=form.cleaned_data['conteudo'],
-                                    sugestao=sugestao,
-                                    usuario=usuario,
-                                    )
-            comentario.save()
+        if request.method == 'GET':
+            form = ComentarioForm()
+
+        elif request.method == 'POST':
+            form = ComentarioForm(request.POST)
+            if form.is_valid():
+                comentario = Comentario(conteudo=form.cleaned_data['conteudo'],
+                                        sugestao=sugestao,
+                                        usuario=usuario,
+                                        )
+                comentario.save()
+    # usuário não logado
+    except TypeError, e:
+        usuario = None
+        form = False
+    
+
 
     context['sugestao'] = sugestao
     context['form'] = form

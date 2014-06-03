@@ -55,20 +55,18 @@ class LoginForm(ModelForm):
         model = User
         fields = ['username', 'password']
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Username'}),
-            'password': forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Senha'}),
+            'username': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Seu e-mail'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Sua senha'}),
         }
 
 class UsuarioForm(ModelForm):
-    senha = forms.CharField()
-    email = forms.CharField()
+    senha = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Senha'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}))
     class Meta:
         model = Usuario
         fields = ['nome', 'cpf', 'email', 'senha', 'instituto']
         widgets = {
             'nome': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Seu nome completo'}),
             'cpf': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'CPF'}),
-            'email': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}),
-            'senha': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Senha'}),
             'instituto': forms.Select(attrs={'class':'form-control'}),
         }
