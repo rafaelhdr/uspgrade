@@ -70,7 +70,7 @@ class UsuarioTipoForm(ModelForm):
 
 class UsuarioForm(ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Senha'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'e-mail'}))
     class Meta:
         model = Usuario
         fields = ['nome', 'cpf', 'email', 'senha', 'instituto']
