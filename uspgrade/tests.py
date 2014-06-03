@@ -30,7 +30,14 @@ class UspgradeTest(TestCase):
         """
         
         """
-        response = self.client.get('/')
+        response = self.client.post('/cadastro',
+                                    {'nome': 'Novo usuário',
+                                     'cpf': '',
+                                     'email': '',
+                                     'senha': '',
+                                     'instituto': '',
+                                    })
+        self.assertEqual(response.context['falha'], True)
 
     def test_usuario_consegue_fazer_login_no_sistema(self):
         """
