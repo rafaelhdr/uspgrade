@@ -54,12 +54,10 @@ class Sugestao(models.Model):
 
     @classmethod
     def mais_votadas(cls):
-        votos = Voto.objects.values('sugestao__titulo').annotate(qntd_votos=Count('sugestao')).order_by('-qntd_votos')[0:10]
-        return votos
+        votos = Voto.objects.select_related('sugestao').annotate(qntd_votos=Count('sugestao')).order_by('-qntd_votos')[0:10]
         sugestoes = []
         for voto in votos:
-            pass
-            #sugestoes.append(voto.sugestao)
+            sugestoes.append(Sugestao.objects.get(id=voto.sugestao_id))
         return sugestoes
 
     @classmethod
@@ -79,6 +77,15 @@ class Sugestao(models.Model):
 
     def get_comentarios(self):
         return self.comentario_set.all().order_by('-pk')
+
+    def conta_positivos(self):
+        return Voto.objects.filter(sugestao=self, tipo='E').count()
+
+    def conta_negativos(self):
+        return Voto.objects.filter(sugestao=self, tipo='R').count()
+
+    def conta_denuncias(self):
+        return Voto.objects.filter(sugestao=self, tipo='D').count()
 
 class Comentario(models.Model):
     """"""

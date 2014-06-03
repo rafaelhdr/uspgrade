@@ -2,7 +2,7 @@
 
 from django.forms import ModelForm
 from django import forms
-from uspgrade.models import Sugestao, Usuario, Comentario
+from uspgrade.models import Sugestao, Usuario, Comentario, Resposta
 from django.contrib.auth.models import User
 
 class ComentarioForm(ModelForm):
@@ -10,7 +10,7 @@ class ComentarioForm(ModelForm):
         model = Comentario
         fields = ['conteudo',]
         widgets = {
-            'conteudo': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Escreva aqui seu'}),
+            'conteudo': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Escreva aqui seu comentário'}),
         }
 
 class BuscaForm(ModelForm):
@@ -28,6 +28,16 @@ class BuscaForm(ModelForm):
         self.fields['conteudo'].required = False
         self.fields['categoria'].required = False
         self.fields['instituto'].required = False
+
+class RespostaForm(ModelForm):
+    class Meta:
+        model = Resposta
+        fields = ['tipo', 'sugestao', 'conteudo']
+        widgets = {
+            'tipo': forms.Select(attrs={'class':'form-control'}),
+            'sugestao': forms.HiddenInput(),
+            'conteudo': forms.Textarea(attrs={'class':'form-control', 'placeholder': 'Resposta para os usuários'}),
+        }
 
 class SugestaoForm(ModelForm):
     class Meta:

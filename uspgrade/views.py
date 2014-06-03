@@ -1,12 +1,15 @@
 # coding=utf8
 
 from django.shortcuts import redirect, render_to_response, get_object_or_404
-from uspgrade.models import Sugestao, Usuario, Comentario
-from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, ComentarioForm
+from uspgrade.models import Sugestao, Usuario, Comentario, Resposta, Voto
+from uspgrade.forms import SugestaoForm, UsuarioForm, LoginForm, BuscaForm, ComentarioForm, RespostaForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def home(request):
     """
@@ -62,6 +65,11 @@ def sugestao(request, sugestao_id):
     context['sugestao'] = sugestao
     context['form'] = form
     context['usuario'] = usuario
+    context['form_resposta'] = RespostaForm()
+    try:
+        context['resposta'] = sugestao.resposta_set.all()[0]
+    except IndexError, e:
+        context['resposta'] = None
     return render_to_response('uspgrade/sugestao.html', context, context_instance=RequestContext(request))
 
 def buscar(request):
@@ -266,11 +274,11 @@ def cadastro(request):
                 user = User.objects.create_user(form.cleaned_data['email'], form.cleaned_data['email'], form.cleaned_data['senha'])
                 user.save()
                 usuario = Usuario(nome=form.cleaned_data['nome'],
-                                    cpf=form.cleaned_data['cpf'],
-                                    instituto=form.cleaned_data['instituto'],
-                                    user=user,
-                                    tipo='Visitante',
-                                    )
+                                  cpf=form.cleaned_data['cpf'],
+                                  instituto=form.cleaned_data['instituto'],
+                                  user=user,
+                                  tipo='Visitante',
+                                  )
                 usuario.save()
                 context['sucesso'] = True
             else:
@@ -279,3 +287,83 @@ def cadastro(request):
 
     # Response
     return render_to_response('uspgrade/cadastro.html', context, context_instance=RequestContext(request))
+
+# APIs
+
+def responder(request):
+    """
+    Ajax para resposta dada pelo site
+
+    **Context**
+
+    ``result``
+        resposta válida (ou não)
+
+    **Template:**
+
+    None
+
+    """
+    if request.method == 'POST':
+        form = RespostaForm(request.POST)
+
+        if form.is_valid():
+            # Save on database
+            conteudo = form.cleaned_data['conteudo']
+            sugestao = form.cleaned_data['sugestao']
+            tipo = form.cleaned_data['tipo']
+            resposta = Resposta(conteudo=conteudo,
+                                sugestao=sugestao,
+                                tipo=tipo,
+                                usuario=Usuario.objects.get(user=request.user),
+                                )
+            resposta.save()
+
+            # Response
+            response_data = {}
+            response_data['result'] = 'success'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        else:
+            response_data = {}
+            response_data['result'] = 'fail'
+            response_data['error'] = 'invalid-data'
+            response_data['errors'] = form.errors
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+def votar(request):
+    """
+    Ajax para voto pelo site
+
+    **Context**
+
+    ``result``
+        resposta válida (ou não)
+
+    **Template:**
+
+    None
+
+    """
+    if request.method == 'POST':
+        response_data = {}
+        
+        tipo_voto = request.POST['voto']
+        sugestao = Sugestao.objects.get(id=request.POST['sugestao'])
+        usuario = Usuario.objects.get(user=request.user)
+
+        # Erro - já existe voto nessa sugestão
+        try:
+            voto = Voto.objects.get(usuario=usuario, sugestao=sugestao)
+            response_data['result'] = 'fail'
+            response_data['message'] = 'Você já votou para essa sugestão, e é permitido apenas um voto.'
+
+        # Ok - pode votar
+        except Voto.DoesNotExist, e:
+            response_data['result'] = 'success'
+            response_data['message'] = 'Voto feito com sucesso.'
+            voto = Voto(usuario=usuario, sugestao=sugestao, tipo=tipo_voto)
+            voto.save()
+
+        return HttpResponse(json.dumps(response_data), content_type="application/json")

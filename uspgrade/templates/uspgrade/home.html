@@ -15,7 +15,12 @@
         <div class="panel-body">
           {% if sugestoes_recentes %}
           {% for sugestao in sugestoes_recentes %}
-          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a></p>
+          <p>
+            <a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a>
+            <span title="Endossos" class="glyphicon glyphicon-chevron-up text-success"></span> {{ sugestao.conta_positivos }}
+            <span title="Rechaçadas" class="glyphicon glyphicon-chevron-down text-danger"></span> {{ sugestao.conta_negativos }}
+            <span title="Denúncias" class="glyphicon glyphicon-remove text-danger"></span> {{ sugestao.conta_denuncias }}
+          </p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -29,7 +34,12 @@
         <div class="panel-body">
           {% if mais_votadas %}
           {% for sugestao in mais_votadas %}
-          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.sugestao__titulo }}</a></p>
+          <p>
+            <a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a>
+            <span title="Endossos" class="glyphicon glyphicon-chevron-up text-success"></span> {{ sugestao.conta_positivos }}
+            <span title="Rechaçadas" class="glyphicon glyphicon-chevron-down text-danger"></span> {{ sugestao.conta_negativos }}
+            <span title="Denúncias" class="glyphicon glyphicon-remove text-danger"></span> {{ sugestao.conta_denuncias }}
+          </p>
           {% endfor %}
           {% else %}
           Não há sugestões cadastradas
@@ -43,10 +53,15 @@
         <div class="panel-body">
           {% if sugestoes_respondidas %}
           {% for sugestao in sugestoes_respondidas %}
-          <p><a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a></p>
+          <p>
+            <a href="{{ sugestao.get_absolute_url }}">{{ sugestao.titulo }}</a>
+            <span title="Endossos" class="glyphicon glyphicon-chevron-up text-success"></span> {{ sugestao.conta_positivos }}
+            <span title="Rechaçadas" class="glyphicon glyphicon-chevron-down text-danger"></span> {{ sugestao.conta_negativos }}
+            <span title="Denúncias" class="glyphicon glyphicon-remove text-danger"></span> {{ sugestao.conta_denuncias }}
+          </p>
           {% endfor %}
           {% else %}
-          Não há sugestões cadastradas
+          Não há sugestões respondidas
           {% endif %}
         </div>
       </div>

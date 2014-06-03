@@ -45,6 +45,13 @@
             {{ sugestao.conteudo | slice:":100" }}...
           </div>
         </div>
+        {% empty %}
+        <hr />
+        <div class="row">
+          <div class="col-sm-12">
+            <p>Não foi encontrado nenhum resultado.</p>
+          </div>
+        </div>
         {% endfor %}
 
       </div>
