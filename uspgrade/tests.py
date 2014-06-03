@@ -200,4 +200,18 @@ class UspgradeTest(TestCase):
         """
         
         """
-        response = self.client.get('/')
+        usuario = Usuario.objects.get(pk=1)
+        sugestao = Sugestao.objects.get(pk=1)
+        for i in range(100):
+            voto = Voto(usuario=usuario, sugestao=sugestao, voto='E')
+            voto.save()
+        response = self.client.post('/login',
+                                    {'username': 'rafael',
+                                     'password': 'asdasd',
+                                    })
+        response = self.client.post('/api/votar',
+                                   {'voto': 'E',
+                                    'sugestao': '1',
+                                   })
+        sugestao = Sugestao.objects.get(pk=1)
+        self.assertEqual(sugestao.notificada, True)

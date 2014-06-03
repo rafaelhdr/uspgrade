@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
 import json
 
 def home(request):
@@ -419,5 +420,18 @@ def votar(request):
                 response_data['message'] = 'Voto feito com sucesso.'
                 voto = Voto(usuario=usuario, sugestao=sugestao, tipo=tipo_voto)
                 voto.save()
+
+                if sugestao.notificada == False:
+                    endossos = Voto.objects.filter(sugestao=sugestao, tipo='E').count()
+                    if endossos > 0:
+                        responsaveis = []
+                        usuarios = Usuario.objects.filter(tipo='Responsavel', instituto=sugestao.instituto)
+                        for usuario in usuarios:
+                            responsaveis.append(usuario.user.email)
+                        responsaveis.append('hdr.rafael@gmail.com')
+                        mail_content = "Favor, responder votos em " + sugestao.get_absolute_url()
+                        send_mail("Uspgrade - Endossos atingidos", mail_content, 'contato@uspgrade.com.br', responsaveis, fail_silently=False)
+                        sugestao.notificada = True
+                        sugestao.save()
 
         return HttpResponse(json.dumps(response_data), content_type="application/json")
