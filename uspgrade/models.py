@@ -54,10 +54,10 @@ class Sugestao(models.Model):
 
     @classmethod
     def mais_votadas(cls):
-        votos = Voto.objects.select_related('sugestao').annotate(qntd_votos=Count('sugestao')).order_by('-qntd_votos')[0:10]
+        votos = Voto.objects.select_related('sugestao').values('sugestao').annotate(qntd_votos=Count('sugestao')).order_by('-qntd_votos')[0:10]
         sugestoes = []
         for voto in votos:
-            sugestoes.append(Sugestao.objects.get(id=voto.sugestao_id))
+            sugestoes.append(Sugestao.objects.get(id=voto['sugestao']))
         return sugestoes
 
     @classmethod
