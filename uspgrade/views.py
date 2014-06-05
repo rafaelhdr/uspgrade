@@ -69,8 +69,6 @@ def sugestao(request, sugestao_id):
     except TypeError, e:
         usuario = None
         form = False
-    
-
 
     context['sugestao'] = sugestao
     context['form'] = form
@@ -353,29 +351,39 @@ def responder(request):
     """
     if request.method == 'POST':
         form = RespostaForm(request.POST)
+        response_data = {}
 
         if form.is_valid():
-            # Save on database
-            conteudo = form.cleaned_data['conteudo']
             sugestao = form.cleaned_data['sugestao']
-            tipo = form.cleaned_data['tipo']
-            resposta = Resposta(conteudo=conteudo,
-                                sugestao=sugestao,
-                                tipo=tipo,
-                                usuario=Usuario.objects.get(user=request.user),
-                                )
-            resposta.save()
 
-            # Response
-            response_data = {}
-            response_data['result'] = 'success'
+            # Já foi dada uma resposta. Não pode dar outra
+            try:
+                resposta = Resposta.objects.get(sugestao=sugestao)
+                response_data['result'] = 'fail'
+                response_data['message'] = 'Já existe uma resposta cadastrada no sistema.'
+
+            # Caso correto, em que se dá uma resposta
+            except Exception, e:
+                # Save on database
+                conteudo = form.cleaned_data['conteudo']
+                tipo = form.cleaned_data['tipo']
+                resposta = Resposta(conteudo=conteudo,
+                                    sugestao=sugestao,
+                                    tipo=tipo,
+                                    usuario=Usuario.objects.get(user=request.user),
+                                    )
+                resposta.save()
+
+                # Response
+                response_data['result'] = 'success'
+                response_data['message'] = 'Resposta feita com sucesso.'
             return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         else:
-            response_data = {}
             response_data['result'] = 'fail'
             response_data['error'] = 'invalid-data'
             response_data['errors'] = form.errors
+            response_data['message'] = 'Houve erro no preenchimento dos dados.'
             return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
